@@ -1,15 +1,34 @@
-## Put comments here that give an overall description of what your
-## functions do
+## In sum these functions creates an object(makeCacheMatrix) that is a list of 4 functions,
+## and these 4 functions serve as "methods" for the object
+## Then cacheSolve uses these methods to cache the inverted matrix
 
-## Write a short comment describing this function
+## This function creates a list of functions that sets the matrix, gets the matrix,
+## sets the inverted matrix, and gets the inverted matrix respectively
 
 makeCacheMatrix <- function(x = matrix()) {
-
+        m <- NULL
+        set <- function(y) {
+                x <<- y
+                m <<- NULL
+        }
+        get <- function() x
+        setsolve <- function(solve) m <<- solve
+        getsolve <- function() m
+        list(set = set, get = get,
+             setsolve = setsolve,
+             getsolve = getsolve)
 }
 
 
-## Write a short comment describing this function
-
+## This function retrieves the cached inverted matrix or calculates a new inverted matrix input
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+        m <- x$getsolve()
+        if(!is.null(m)) {
+                message("getting cached data")
+                return(m)
+        }
+        data <- x$get()
+        m <- solve(data, ...)
+        x$setsolve(m)
+        m
 }
